@@ -1,0 +1,58 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.navbar {
+  background-color: #1b0041;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  position: fixed; /* Make navbar fixed to stay at the top */
+  width: 100%;
+  height: 60px; /* Fixed height for the navbar */
+  top: 0; /* Position it at the top of the page */
+  left: 0;
+  z-index: 1000; /* High z-index to ensure it stays on top */
+}
+
+.siteTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  position: absolute;
+  left: 1rem; /* Position the site title on the left */
+  z-index: 2; /* Ensure the site title is above the navbar content */
+}
+
+.navbarContainer {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  position: relative;
+  margin-left: auto; /* Pushes the container to the right of the site title */
+  margin-right: auto; /* Center the container within the navbar */
+}
+
+.navList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  z-index: 2; /* Ensure nav items are above any potential overlays */
+}
+
+.navList li {
+  color: white; /* Default text color */
+}
+
+.navList a {
+  color: inherit; /* Inherit color from parent li */
+  text-decoration: none;
+  padding: 1rem; /* Increase clickable area */
+}
