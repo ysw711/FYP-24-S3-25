@@ -1,75 +1,43 @@
-from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-from  flask_cors import CORS
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+from flask import Flask, render_template, request, jsonify
+from git_large_model import generate_captions_large  # Import from git_large_model.py
+from PIL import Image
+import requests
+from io import BytesIO
+import base64
 
 app = Flask(__name__)
-CORS(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:''@localhost/flask'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+@app.route('/', methods=['GET', 'POST'])
+def predictCaption():
+    generatedCaption = None
+    image = None
 
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
+    if request.method == 'POST':
+        data = request.get_json()  # Expect JSON data
+        imageFile = data.get('imageFile')
+        image_url = data.get('imageURL')
 
-class User(db.Model):
-    userId = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100))
-    email = db.Column(db.String(100))
+        if imageFile:
+            # Decode the base64 string to image
+            image_data = base64.b64decode(imageFile)
+            image = Image.open(BytesIO(image_data))
+        elif image_url:
+            response = requests.get(image_url)
+            image = Image.open(BytesIO(response.content))
 
-    def __init__(self, username, email):
-        self.username = username  # Changed from `title` to `username`
-        self.email = email
+        # Generate caption for the image
+        if image:
+            generatedCaption = generate_captions_large(image)
+            # Encode the image in base64 for display
+            buffered = BytesIO()
+            image.save(buffered, format="JPEG")
+            image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+            image = f"data:image/jpeg;base64,{image_base64}"
 
-class UserSchema(ma.Schema):
-    class Meta:
-        fields = ('userId', 'username', 'email')
-
-user_schema = UserSchema()
-users_schema = UserSchema(many=True)
-
-@app.route('/get', methods=['GET'])
-def get_articles():
-    all_users = User.query.all()
-    results = users_schema.dump(all_users)
-    return jsonify(results)
- 
-@app.route('/get/<userId>/', methods=['GET'])
-def post_details(userId):
-    user = User.query.get(userId)
-    return user_schema.jsonify(user)
-
-
-@app.route('/add', methods=['POST'])
-def add_articles():
-    username = request.json['username']
-    email = request.json['email']
-
-    users = User(username, email)
-    db.session.add(users)
-    db.session.commit()
-    return user_schema.jsonify(users)
-
-@app.route('/update/<userId>/', methods=['PUT'])
-def update_article(userId):
-    user = User.query.get(userId)
-
-    username = request.json['username']
-    email = request.json['email']
-
-    user.username = username
-    user.email = email
-
-    db.session.commit()
-    return user_schema.jsonify(user)
-
-@app.route('/delete/<userId>/', methods=['DELETE'])
-def user_delete(userId):
-    user = User.query.get(userId)
-    db.session.delete(user)
-    db.session.commit()
-
-    return user_schema.jsonify(user)
+    return jsonify(caption=generatedCaption, image=image)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=3000, debug=True)

@@ -11,6 +11,7 @@ const Navbar = () => (
         <li><a href="#about">About</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="#login">Login</a></li>
+        <li><a href="#imagecaptioning">ImgCaption</a></li> {/* Updated ID to match component */}
       </ul>
     </div>
   </nav>
