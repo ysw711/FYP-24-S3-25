@@ -1,13 +1,23 @@
-import React from 'react';
-import Navbar from './components/Navbar';
-import MainPage from './MainPage';
+import React from 'react'
+import Navbar from './components/navbar/Navbar';
+import Header from './containers/header/Header';
+import About from './containers/about/About';
+import Features from './containers/features/Features'
+import FAQ from './containers/faq/FAQ';
+import Footer from './containers/footer/Footer';
 
-const App = () => {
+
+function App() {
   return (
-    <div>
-      <MainPage />
-    </div>
+    <>
+      <Navbar />
+      <Header />
+      <Features />
+      <About />
+      <FAQ />
+      <Footer />
+    </>
   );
-};
+}
 
 export default App;

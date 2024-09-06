@@ -1,0 +1,70 @@
+/* FAQ container */
+.faq-container {
+  background-color: #FEB7C4;
+  padding: 60px 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align content to the left */
+  gap: 40px; /* Space between header and content */
+}
+
+/* FAQ header */
+.faq-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align header to the left */
+  gap: 20px; /* Space between title and subtitle */
+}
+
+/* FAQ title */
+.faq-title {
+  color: #892a42;
+  font-size: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+}
+
+/* FAQ subtitle */
+.faq-subtitle {
+  color: #222222;
+  font-size: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+/* FAQ content */
+.faq-content {
+  display: flex;
+  flex-wrap: wrap; /* Allow FAQ items to wrap when there’s no more space */
+  gap: 20px; /* Space between FAQ items */
+  justify-content: flex-start; /* Align items to the left */
+  width: 100%;
+}
+
+/* FAQ item */
+.faq-item {
+  display: flex;
+  flex-direction: column; /* Stack question and answer inside each item */
+  width: 30%; /* Each FAQ item takes up 30% of the width */
+  background-color: #ffffff;
+  padding: 16px;
+  border: 1px solid rgba(255, 140, 160, 0.1);
+  border-radius: 6px;
+}
+
+/* FAQ question */
+.faq-question {
+  color: #222222;
+  font-size: 24px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  margin-bottom: 10px; /* Space between question and answer */
+}
+
+/* FAQ answer */
+.faq-answer {
+  color: #222222;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}

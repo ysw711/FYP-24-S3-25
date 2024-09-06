@@ -1,0 +1,36 @@
+.about {
+    background-color: #FF9F1C; /* About section background color */
+    color: white;
+    padding: 5rem;
+  }
+  
+  .about-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space between image and text */
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  }
+  
+  .about-image {
+    flex: 1;
+    margin-right: 2rem; /* Space between image and text */
+  }
+  
+  .about-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  .about-text {
+    flex: 1; /* More space for text */
+  }
+  
+  .about-text h2 {
+    margin-top: 0;
+  }
+  
+  .about-text p {
+    margin-bottom: 1rem; /* Space between paragraphs */
+  }
+  
