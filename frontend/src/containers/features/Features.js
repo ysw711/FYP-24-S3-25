@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Features.css';
 
 const Features = () => {
@@ -9,10 +9,14 @@ const Features = () => {
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  
-  const goToPrevious = () => setCurrentIndex(currentIndex === 0 ? slides.length - 1 : currentIndex - 1);
-  const goToNext = () => setCurrentIndex(currentIndex === slides.length - 1 ? 0 : currentIndex + 1);
-  const goToSlide = (slideIndex) => setCurrentIndex(slideIndex);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex(prevIndex => (prevIndex + 1) % slides.length);
+    }, 3000); // Change slide every 3 seconds
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, [slides.length]);
 
   const slideStyles = { backgroundImage: `url(${slides[currentIndex].url})` };
 
@@ -24,23 +28,15 @@ const Features = () => {
           <p className="text-description">
             Encourage your child to describe their world and uncover new insights through creative exploration and observation.
           </p>
+          <div className="button-container">
+            <button className="discover-button">Learn More</button>
+          </div>
         </div>
         <div className="slider-container">
           <div className="slider-content">
-            <div onClick={goToPrevious} className="left-arrow">❰</div>
-            <div onClick={goToNext} className="right-arrow">❱</div>
             <div className="slide" style={slideStyles}></div>
-            <div className="dots-container">
-              {slides.map((_, slideIndex) => (
-                <div
-                  className={`dot ${slideIndex === currentIndex ? 'active' : ''}`}
-                  key={slideIndex}
-                  onClick={() => goToSlide(slideIndex)}
-                >
-                  ●
-                </div>
-              ))}
-            </div>
+            <div className="left-arrow" onClick={() => setCurrentIndex(currentIndex === 0 ? slides.length - 1 : currentIndex - 1)}>❰</div>
+            <div className="right-arrow" onClick={() => setCurrentIndex(currentIndex === slides.length - 1 ? 0 : currentIndex + 1)}>❱</div>
           </div>
         </div>
       </div>

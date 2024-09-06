@@ -1,36 +1,50 @@
 .about {
-    background-color: #FF9F1C; /* About section background color */
-    color: white;
-    padding: 5rem;
-  }
-  
-  .about-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Space between image and text */
-    flex-wrap: wrap; /* Allow wrapping for smaller screens */
-  }
-  
-  .about-image {
-    flex: 1;
-    margin-right: 2rem; /* Space between image and text */
-  }
-  
-  .about-image img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-  }
-  
-  .about-text {
-    flex: 1; /* More space for text */
-  }
-  
-  .about-text h2 {
-    margin-top: 0;
-  }
-  
-  .about-text p {
-    margin-bottom: 1rem; /* Space between paragraphs */
-  }
-  
+  background-color: #FF9F1C; /* Background color */
+  color: white;
+  padding: 60px; /* Updated padding to match container styles */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
+  gap: 60px; /* Space between image and text, matching container gap */
+}
+
+.about-content {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center content horizontally */
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  gap: 24px; /* Space between image and text */
+}
+
+.about-image {
+  flex: 1;
+  max-width: 100%; /* Ensure image does not exceed container width */
+  margin-right: 24px; /* Space between image and text */
+}
+
+.about-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.about-text {
+  flex: 1;
+}
+
+.about-text h2 {
+  font-size: 40px; /* Match the specified font size */
+  font-family: 'Poppins', sans-serif; /* Font family */
+  font-weight: 700; /* Font weight */
+  color: #ffffff; /* Text color */
+  margin-top: 0;
+}
+
+.about-text p {
+  font-size: 16px; /* Match the specified font size */
+  font-family: 'Poppins', sans-serif; /* Font family */
+  font-weight: 400; /* Font weight */
+  color: #ffffff; /* Text color */
+  margin-bottom: 1rem; /* Space between paragraphs */
+  text-align: left; /* Align text to the left */
+}
