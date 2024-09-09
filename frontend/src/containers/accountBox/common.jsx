@@ -17,14 +17,14 @@ export const FormContainer = styled.form`
 
 export const MutedLink = styled.a`
   font-size: 11px;
-  color: rgba(254, 183, 196, 0.8); /* Adjusted to a muted pink */
+  color: rgba(200, 200, 200, 0.8);
   font-weight: 500;
   text-decoration: none;
 `;
 
 export const BoldLink = styled.a`
   font-size: 11px;
-  color: #FEB7C4; /* Adjusted to the pink color */
+  color: rgb(241, 196, 15);
   font-weight: 500;
   text-decoration: none;
   margin: 0 4px;
@@ -34,23 +34,23 @@ export const Input = styled.input`
   width: 100%;
   height: 42px;
   outline: none;
-  border: 1px solid rgba(254, 183, 196, 0.3); /* Adjusted to a muted pink */
+  border: 1px solid rgba(200, 200, 200, 0.3);
   padding: 0px 10px;
   border-bottom: 1.4px solid transparent;
   transition: all 200ms ease-in-out;
   font-size: 12px;
 
   &::placeholder {
-    color: rgba(254, 183, 196, 1); /* Adjusted to a pink placeholder */
+    color: rgba(200, 200, 200, 1);
   }
 
   &:not(:last-of-type) {
-    border-bottom: 1.5px solid rgba(254, 183, 196, 0.4); /* Adjusted to a pink border */
+    border-bottom: 1.5px solid rgba(200, 200, 200, 0.4);
   }
 
   &:focus {
     outline: none;
-    border-bottom: 2px solid #FEB7C4; /* Adjusted to the pink color */
+    border-bottom: 2px solid rgb(241, 196, 15);
   }
 `;
 
@@ -61,16 +61,16 @@ export const SubmitButton = styled.button`
   font-size: 15px;
   font-weight: 600;
   border: none;
-  border-radius: 100px;
+  border-radius: 100px 100px 100px 100px;
   cursor: pointer;
-  transition: all 240ms ease-in-out;
-  background: #FEB7C4; /* Base pink color */
+  transition: all, 240ms ease-in-out;
+  background: rgb(241, 196, 15);
   background: linear-gradient(
     58deg,
-    rgba(254, 183, 196, 1) 20%,
+    rgba(241, 196, 15, 1) 20%,
     rgba(243, 172, 18, 1) 100%
-  ); /* You can adjust the second color of the gradient if you want a different effect */
-  
+  );
+
   &:hover {
     filter: brightness(1.03);
   }

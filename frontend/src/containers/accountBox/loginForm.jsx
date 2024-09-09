@@ -9,9 +9,11 @@ import {
 } from "./common";
 import { Marginer } from "../marginer";
 import { AccountContext } from "./accountContext";
+import { useNavigate } from "react-router-dom";  // Import useNavigate
 
 export function LoginForm(props) {
   const { switchToSignup } = useContext(AccountContext);
+  const navigate = useNavigate();  // Initialize useNavigate hook
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,9 +32,11 @@ export function LoginForm(props) {
     const data = await response.json();
 
     if (response.ok) {
-      // alert(data.message);
+      // Store the email in localStorage or wherever necessary
       localStorage.setItem('email', email);
-      window.location.href = '/';
+
+      // Redirect to the /profile page after successful login
+      navigate('/profile');
     } else {
       alert(data.message);
     }
@@ -40,14 +44,26 @@ export function LoginForm(props) {
 
   return (
     <BoxContainer>
-      <FormContainer onSubmit={handleSubmit}>
-        <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-        <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+      <FormContainer>
+        <Input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        </FormContainer>
         <Marginer direction="vertical" margin={10} />
         <MutedLink href="#">Forget your password?</MutedLink>
         <Marginer direction="vertical" margin="1.6em" />
-        <SubmitButton type="submit">Signin</SubmitButton>
-      </FormContainer>
+        <SubmitButton type="submit" onClick={handleSubmit}>Signin</SubmitButton>
       <Marginer direction="vertical" margin="1em" />
       <MutedLink href="#">
         Don't have an account?{" "}

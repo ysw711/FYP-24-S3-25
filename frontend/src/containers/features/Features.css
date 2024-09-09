@@ -2,7 +2,10 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 5rem;
+  padding-left: 20rem;
+  padding-right: 20rem;
+  padding-top: 10rem;
+  padding-bottom: 10rem;
   background-color: #6DA9F0; /* Set background color */
   justify-content: center;
   align-items: center;
@@ -10,28 +13,29 @@
 
 .text-slider-container {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20rem;
   width: 100%;
-  justify-content: space-between;
-  margin-bottom: 4rem;
 }
 
 .text-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width: 40%;
+  max-width: 18%;
   padding-right: 2rem;
 }
 
-.text-content h2 {
-  font-size: 2.5rem;
+.text-content h1 {
+  font-size: 40px;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .text-description {
-  font-size: 1.2rem;
-  line-height: 1.5;
+  font-size: 16px;
+  margin-bottom: 2rem;
 }
 
 .button-container {
@@ -42,13 +46,11 @@
   background-color: #558564;
   color: #ffffff;
   font-size: 16px;
-  font-family: Poppins, "Regular";
-  font-weight: 400;
   text-align: center;
   vertical-align: center;
   border: none;
-  border-radius: 8px;
-  padding: 12px 24px;
+  border-radius: 6px;
+  padding: 12px 80px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -64,7 +66,7 @@
 
 .slider-content {
   position: relative;
-  height: 600px; /* Adjust height as needed */
+  height: 400px;
   width: 100%;
   overflow: hidden;
 }
@@ -77,7 +79,8 @@
   background-position: center;
 }
 
-.left-arrow, .right-arrow {
+.left-arrow,
+.right-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -98,29 +101,81 @@
 .features-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
   gap: 2rem;
-  max-width: 1200px;
-  margin-top: 3rem;
+  margin-top: 10rem;
 }
 
 .feature-item {
   flex: 1;
   min-width: 250px;
-  padding: 1rem;
-  background-color: #fff;
+  padding: 3rem;
   border-radius: 10px;
   text-align: center;
+  background-color: #fddd85;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.star {
+  font-size: 7rem; /* Adjust the size as needed */
+  margin-bottom: 3rem;
+  position: relative; /* Required for the shadow to be applied correctly */
+  display: inline-block; /* Ensure that the box-shadow applies correctly */
+  border-radius: 50%; /* Ensure the shadow is circular */
+  padding: 1rem; /* Add some padding to ensure shadow visibility */
+  box-shadow: 0 0 15px rgba(36, 36, 36, 0.3); /* Adjust shadow size and color as needed */
+  background: rgba(255, 255, 255, 0.185);
+}
+
+
 .feature-item h3 {
-  font-size: 1.5rem;
+  font-size: 20px;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
 .feature-item p {
   font-size: 1rem;
-  color: #666;
+  color: #222222;
+  font-size: 16px;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 1600px) {
+  .features-container {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+
+  .text-slider-container {
+    flex-direction: column;
+    gap: 2rem; /* Adjust the gap between elements */
+  }
+
+  .slider-container {
+    order: -1; /* Move slider-container above text-content */
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .text-content {
+    max-width: 100%; /* Allow text content to take full width */
+    text-align: center; /* Center-align text for better appearance on small screens */
+    padding-right: 0;
+  }
+
+  .discover-button {
+    width: 100%; /* Make the button full width on smaller screens */
+    padding: 12px;
+  }
+
+  .features-grid {
+    flex-direction: column;
+    gap: 2rem; /* Adjust the gap between feature items */
+    align-items: center; /* Center items on smaller screens */
+  }
+
+  .feature-item {
+    max-width: 100%;
+  }
 }

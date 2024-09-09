@@ -23,7 +23,6 @@ const Navbar = () => {
 
         if (response.ok) {
             localStorage.removeItem('email');
-            // alert(data.message);
             navigate('/login');
         } else {
             alert("Logout failed. Please try again.");
@@ -42,9 +41,11 @@ const Navbar = () => {
                     <li><Link to='/ourApp'>Our App</Link></li>
                     <li><Link to='/about'>About</Link></li>
                     <li><Link to='/contact'>Contact</Link></li>
-                    {/* <li><Link to='/login'>Login</Link></li> */}
                     {email ? (
                         <>
+                            <li><Link to="/profile" className="profile-link">
+                                <div className="profile-navbar" />
+                            </Link></li>
                             <li><Link to="/" onClick={handleLogout}>Logout</Link></li>
                         </>
                     ) : (

@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { AccountBox } from "../containers/accountBox"; 
-import Navbar from '../components/navbar/Navbar'
+import Navbar from '../containers/navbar/Navbar'
 
 const AppContainer = styled.div`
   width: 100%;
-  height: 100vh; /* Ensures the container covers the full viewport height */
+  padding: 10rem;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;

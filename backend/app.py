@@ -2,11 +2,6 @@ import os
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 from flask import Flask, render_template, request, jsonify, session
-# from git_large_model import generate_captions_large  # Import from git_large_model.py
-# from PIL import Image
-# import requests
-# from io import BytesIO
-# import base64
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -19,45 +14,45 @@ db = SQLAlchemy(app)
 
 CORS(app, origins=["http://localhost:3000"], supports_credentials=True)  # Enable CORS for React frontend
 
-@app.route('/', methods=['GET', 'POST'])
-def predictCaption():
-    generatedCaption = None
-    image = None
-
-    if request.method == 'POST':
-        data = request.get_json()  # Expect JSON data
-        imageFile = data.get('imageFile')
-        image_url = data.get('imageURL')
-
-        if imageFile:
-            # Decode the base64 string to image
-            image_data = base64.b64decode(imageFile)
-            image = Image.open(BytesIO(image_data))
-        elif image_url:
-            response = requests.get(image_url)
-            image = Image.open(BytesIO(response.content))
-
-        # Generate caption for the image
-        if image:
-            generatedCaption = generate_captions_large(image)
-            # Encode the image in base64 for display
-            buffered = BytesIO()
-            image.save(buffered, format="JPEG")
-            image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-            image = f"data:image/jpeg;base64,{image_base64}"
-
-    return jsonify(caption=generatedCaption, image=image)
-
 # User model
+# User model with parent-child relationship
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(), nullable=False)
     email = db.Column(db.String(), nullable=False, unique=True)
     password = db.Column(db.String(150), nullable=False)
+    parent_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # Parent ID
+
+    # Define relationship
+    children = db.relationship('User', backref=db.backref('parent', remote_side=[id]), lazy=True)
+
 
 # Create DB
 with app.app_context():
     db.create_all()
+
+# Fetch all users (for user list)
+@app.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    user_list = [user.name for user in users]
+    return jsonify(user_list), 200
+
+# Add new user (for user list)
+@app.route('/add_user', methods=['POST'])
+def add_user():
+    data = request.get_json()
+    user_name = data['name']
+
+    # Check if the user already exists
+    if User.query.filter_by(name=user_name).first():
+        return jsonify({"message": "Username already exists"}), 400
+
+    # Create new user
+    new_user = User(name=user_name, email=f"{user_name}@example.com", password='default')
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({"message": "User added successfully!"}), 201
 
 # Signup Route
 @app.route('/signup', methods=['POST'])
@@ -85,6 +80,30 @@ def logout():
     session.pop('user', None)
     return jsonify({"message": "Logout successful!"}), 200
 
-
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
+
+# Add new child profile for the logged-in parent
+@app.route('/add_child_profile', methods=['POST'])
+def add_child_profile():
+    if 'user' not in session:
+        return jsonify({"message": "Login required!"}), 401
+
+    data = request.get_json()
+    user_name = data['name']
+    parent_email = session['user']  # Get the logged-in parent's email
+
+    parent = User.query.filter_by(email=parent_email).first()
+
+    # Check if the child name already exists under this parent
+    if User.query.filter_by(name=user_name, parent_id=parent.id).first():
+        return jsonify({"message": "Child profile already exists"}), 400
+
+    # Create the child profile
+    new_child = User(name=user_name, email=f"{user_name}@example.com", password='default', parent_id=parent.id)
+    db.session.add(new_child)
+    db.session.commit()
+
+    return jsonify({"message": "Child profile added successfully!"}), 201
+
+

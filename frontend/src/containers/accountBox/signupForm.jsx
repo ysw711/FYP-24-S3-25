@@ -17,54 +17,99 @@ export function SignupForm(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if password and confirm password match
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+    // Basic validation
+    if (!name || !email || !password || !confirmPassword) {
+      setErrorMessage("Please fill out all fields.");
       return;
     }
 
-    const response = await fetch('http://localhost:5000/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password
-      }),
-    });
+    if (!validateEmail(email)) {
+      setErrorMessage("Invalid email format.");
+      return;
+    }
 
-    const data = await response.json();
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match!");
+      return;
+    }
 
-    if (response.ok) {
-      alert(data.message);
-      switchToSignin();
-    } else {
-      alert(data.message);
+    try {
+      const response = await fetch('http://localhost:5000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.message);
+        switchToSignin();
+      } else {
+        setErrorMessage(data.message);
+      }
+    } catch (error) {
+      setErrorMessage("There was an error with the signup. Please try again later.");
     }
   };
 
   return (
     <BoxContainer>
       <FormContainer onSubmit={handleSubmit}>
-        <Input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} required/>
-        <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-        <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-        <Input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required/>
+        <Input
+          type="text"
+          placeholder="Full Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <Input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <Input
+          type="password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+        />
+        </FormContainer>
         <Marginer direction="vertical" margin={20} />
-        <SubmitButton type="submit">Signup</SubmitButton>
-      </FormContainer>      
+
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
+        <SubmitButton type="submit" onClick={handleSubmit}>Signup</SubmitButton>
       <Marginer direction="vertical" margin="1em" />
       <MutedLink href="#">
-        Already have an account?
-        <BoldLink href="#" onClick={switchToSignin}>
-          Sign in
-        </BoldLink>
+        Already have an account? 
+        <BoldLink href="#" onClick={switchToSignin}>Sign in</BoldLink>
       </MutedLink>
     </BoxContainer>
   );

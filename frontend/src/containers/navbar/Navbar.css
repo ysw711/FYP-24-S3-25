@@ -16,9 +16,8 @@ body {
   background-color: #1b0041;
   box-shadow: 0px 0px 6px 0 #000000;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center items horizontally */
   z-index: 1000;
 }
 
@@ -26,8 +25,9 @@ body {
   display: flex;
   width: 100%;
   max-width: 1440px;
-  align-items: center;
   justify-content: space-between; /* Space between logo and menu */
+  align-items: center; /* Center items vertically */
+  padding: 0 20px; /* Add horizontal padding */
 }
 
 .logo {
@@ -52,7 +52,7 @@ body {
   display: flex;
   list-style: none;
   gap: 1rem;
-  margin: 0; /* Ensure no default margin */
+  align-items: center; /* Ensure items are centered vertically */
 }
 
 .nav-menu li {
@@ -76,6 +76,15 @@ body {
 .icon {
   font-size: 1.5rem;
   color: white;
+}
+
+.profile-navbar {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 10%;
+  background-image: url("../../images/user1.png");
+  background-size: cover;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 768px) {

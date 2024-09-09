@@ -24,7 +24,7 @@ const Features = () => {
     <div className="features-container">
       <div className="text-slider-container">
         <div className="text-content">
-          <h2>Discover and Describe</h2>
+          <h1>Discover and <br></br> Describe</h1>
           <p className="text-description">
             Encourage your child to describe their world and uncover new insights through creative exploration and observation.
           </p>
@@ -42,20 +42,24 @@ const Features = () => {
       </div>
       <div className="features-grid">
         <div className="feature-item">
+          <div class="star">⭐</div>
           <h3>Capture and Describe the World</h3>
-          <p>Encourage your child to describe their world through photos.</p>
+          <p>Let your child be the storyteller by capturing their favorite moments and adding their own voice to describe the scenes, making every photo a unique expression of their creativity.</p>
         </div>
         <div className="feature-item">
+          <div class="star">⭐</div>
           <h3>Interactive Games for Learning</h3>
-          <p>Engage your child with educational games.</p>
+          <p>Engage your child with fun, educational games that enhance creativity and reinforce learning outcomes, all within a safe and enjoyable environment.</p>
         </div>
         <div className="feature-item">
+          <div class="star">⭐</div>
           <h3>Safe and Family-Friendly</h3>
-          <p>A secure platform for kids to explore safely.</p>
+          <p>Designed with young users in mind, SeeSay Moments offers a secure platform where kids can explore and create with confidence, while parents can monitor their progress.</p>
         </div>
         <div className="feature-item">
+          <div class="star">⭐</div>
           <h3>Personalized Experience</h3>
-          <p>Tailor the app to your child’s preferences.</p>
+          <p>Tailor the app experience to your child’s interests. Whether it’s their favorite activities or interactive games, SeeSay Moments adapts to their preferences, making it a truly personalized experience.</p>
         </div>
       </div>
     </div>

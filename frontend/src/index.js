@@ -9,6 +9,7 @@ import OurApp from './routes/OurAppPage'
 import AboutPage from './routes/AboutPage'
 import ContactPage from './routes/ContactPage'
 import LoginPage from './routes/LoginPage'
+import ProfilePage from './routes/ProfilePage'
 
 ReactDOM.render(
   <BrowserRouter>
@@ -18,6 +19,7 @@ ReactDOM.render(
       <Route path='/about' element={<AboutPage />} />
       <Route path='/contact' element={<ContactPage />} />
       <Route path='/login' element={<LoginPage />} />
+      <Route path='/profile' element={<ProfilePage />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
