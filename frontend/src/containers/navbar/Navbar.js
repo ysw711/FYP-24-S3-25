@@ -41,6 +41,7 @@ const Navbar = () => {
                     <li><Link to='/ourApp'>Our App</Link></li>
                     <li><Link to='/about'>About</Link></li>
                     <li><Link to='/contact'>Contact</Link></li>
+                    <li><Link to="/imageCaption">Image Captioner</Link></li>
                     {email ? (
                         <>
                             <li><Link to="/profile" className="profile-link">

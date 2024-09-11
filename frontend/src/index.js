@@ -9,6 +9,7 @@ import OurApp from './routes/OurAppPage'
 import AboutPage from './routes/AboutPage'
 import ContactPage from './routes/ContactPage'
 import LoginPage from './routes/LoginPage'
+import ImageCaptionPage from "./routes/ImageCaptionPage";
 import ProfilePage from './routes/ProfilePage'
 
 ReactDOM.render(
@@ -19,6 +20,7 @@ ReactDOM.render(
       <Route path='/about' element={<AboutPage />} />
       <Route path='/contact' element={<ContactPage />} />
       <Route path='/login' element={<LoginPage />} />
+      <Route path="/imageCaption" element={<ImageCaptionPage />} />
       <Route path='/profile' element={<ProfilePage />} />
     </Routes>
   </BrowserRouter>,

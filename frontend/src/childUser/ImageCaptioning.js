@@ -1,87 +1,275 @@
-import React, { useState, useRef } from 'react';
-import '../styles/childUser/ImageCaptioning.css'; // Correct path to CSS file
+import React, { useState, useRef } from "react";
+import Slider from "react-slick"; // image slider
+import Webcam from "react-webcam"; // web cam
+import "./ImageCaptioning.css";
 
 const ImageCaptioning = () => {
-  const [image, setImage] = useState(null);
-  const [caption, setCaption] = useState('');
-  const fileInputRef = useRef(null);
-  const imageUrlRef = useRef(null);
-  const imgPreviewRef = useRef(null);
+  //state functions (self explanatory)
+  const [caption, setCaption] = useState("");
+  const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [selectedModel, setSelectedModel] = useState("");
+  const [exampleImages] = useState([
+    // example image URLs
+    "https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg",
+    "https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2018/07/17235840/golden-retriever-diving-to-bottom-of-pool-lg.jpg",
+    "https://ichef.bbci.co.uk/news/976/cpsprodpb/16CD7/production/_132299339_bb76bca9-78b6-432b-b118-7f181762e443.jpg",
+    "https://miro.medium.com/v2/resize:fit:1024/1*YMJ1POyhsHklGVmFBLfW_A.jpeg",
+    "https://i.guim.co.uk/img/media/b95bf2911302acf8f7cee71b51e7fef401026824/228_1262_2374_1423/master/2374.jpg?width=1200&height=900&quality=85&auto=format&fit=crop&s=9fdd7512072b8a51074a30e1f5880776",
+  ]);
+  const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+  const [useWebcam, setUseWebcam] = useState(false);
+  const [capturedImage, setCapturedImage] = useState(null);
 
+  // references functions
+  const imageFileRef = useRef(null);
+  const imageUrlRef = useRef(null);
+  const webcamRef = useRef(null);
+  const modelDropdownRef = useRef(null);
+
+  // Pop up alert
+  const showAlert = (message) => {
+    alert(message);
+    setLoading(false);
+  };
+
+  // main handle -> submit image(file or url or webcam image) -> flask(app.py) for generating image
+  const handleSubmit = async (event) => {
+    event.preventDefault(); //prevent default submit action
+    setLoading(true);
+
+    const formData = new FormData();
+    const imageFile = imageFileRef.current.files[0];
+    const imageURL = imageUrlRef.current.value || selectedImageUrl;
+    const imageBlob = capturedImage;
+
+    // error handling process
+    if (!imageFile && !imageURL && !imageBlob) {
+      showAlert("No image selected, please upload an image.");
+      return; //stop the process
+    }
+
+    if (!selectedModel) {
+      showAlert("Please select a model.");
+      return;
+    }
+
+    // append the uploaded image
+    if (imageFile) {
+      formData.append("imageFile", imageFile);
+    } else if (imageURL) {
+      formData.append("imageURL", imageURL);
+    } else if (imageBlob) {
+      formData.append("imageFile", imageBlob, "capturedImage.jpg");
+    }
+
+    formData.append("model", selectedModel);
+
+    //pass the image
+    const response = await fetch("http://localhost:5000/imageCaptioning", {
+      method: "POST",
+      body: formData,
+    });
+
+    //get the caption
+    const data = await response.json();
+    setCaption(data.caption);
+    setLoading(false);
+  };
+
+  //preview image uploaded
   const previewImage = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (imgPreviewRef.current) {
-          imgPreviewRef.current.src = reader.result;
-          setImage(reader.result.split(',')[1]); // Get the base64 string
-        }
-      };
-      reader.readAsDataURL(file);
+      setPreview(URL.createObjectURL(file));
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const previewUrlImage = () => {
     const imageURL = imageUrlRef.current.value;
-    const imageFile = image;
+    if (imageURL) {
+      setPreview(imageURL);
+    }
+  };
+  //image slider handler
+  const handleImageClick = (imageExampleURL) => {
+    setSelectedImageUrl(imageExampleURL);
+    setPreview(imageExampleURL); // Preview the selected image
+    imageUrlRef.current.value = "";
+  };
 
-    const response = await fetch('http://localhost:3000/predict', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ imageURL, imageFile }),
-    });
+  // webcam func
+  const captureWebcamImage = () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setPreview(imageSrc);
+    setSelectedImageUrl(null);
+    setCapturedImage(dataURLtoBlob(imageSrc)); // Convert to Blob for sending
+  };
 
-    const data = await response.json();
-    setCaption(data.caption);
-    setImage(data.image);
+  const dataURLtoBlob = (dataURL) => {
+    const byteString = atob(dataURL.split(",")[1]);
+    const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  };
+
+  // resets all states and clear input
+  const handleClearInputs = () => {
+    imageFileRef.current.value = null;
+    imageUrlRef.current.value = "";
+    setPreview(null);
+    setCaption("");
+    setSelectedModel("");
+    setCapturedImage(null);
+    modelDropdownRef.current.selectedIndex = 0;
+  };
+
+  // text-to-speech functionality
+  const speakCaption = () => {
+    if (caption) {
+      const utterance = new SpeechSynthesisUtterance(caption);
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // slick settings (image slider)
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
   };
 
   return (
-    <div id="imagecaptioning" className="container text-center">
-      <h1 className="mb-4">See Say Caption</h1>
+    <div className="container-imageCaptioning">
+      <div className="title>">
+        <h1>Upload or Capture an Image</h1>
+        <p>
+          Choose an image from your computer or take a new picture with your
+          camera to begin!
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="imageFile" className="form-label">Upload an Image</label>
+        <div className="actions">
+          <div class="upload-btn-wrapper">
+            <button class="btn btn-upload">Upload Image</button>
+            <input
+              type="file"
+              ref={imageFileRef}
+              onChange={previewImage}
+              name=""
+            />
+          </div>
+
+          <button
+            type="button"
+            className="btn btn-capture"
+            onClick={() => setUseWebcam(!useWebcam)}
+          >
+            {useWebcam ? "Close Webcam" : "Capture Image"}
+          </button>
           <input
-            className="form-control"
-            type="file"
-            name="imageFile"
-            id="imageFile"
-            ref={fileInputRef}
-            onChange={previewImage}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="imageURL" className="form-label">Or Enter Image URL</label>
-          <input
-            className="form-control"
-            type="url"
-            name="imageURL"
-            id="imageURL"
+            type="text"
             ref={imageUrlRef}
-            placeholder="https://example.com/image.jpg"
+            placeholder="Enter Image URL"
+            onBlur={previewUrlImage}
           />
         </div>
-        <button className="btn btn-primary" type="submit">Generate Caption</button>
+
+        {useWebcam && (
+          <div className="webcam-container">
+            <Webcam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              className="webcam-view"
+            />
+            <button
+              type="button"
+              onClick={captureWebcamImage}
+              className="btn btn-capture"
+            >
+              Capture
+            </button>
+          </div>
+        )}
+
+        <div className="image-preview-container">
+          <div className="outer">
+            {preview ? (
+              preview && (
+                <img src={preview} alt="Preview" className="image-preview" />
+              )
+            ) : (
+              <div className="image-placeholder">No Image Selected</div>
+            )}
+            <div className="generated-caption">
+              <p className="generated-caption-p">
+                Generated Caption: {caption || "Your caption will appear here"}
+                {caption && (
+                  <button
+                    className="btn-speak"
+                    onClick={(event) => {
+                      event.preventDefault(); // Prevents form submission
+                      speakCaption();
+                    }}
+                  >
+                    🔊
+                  </button> // Speaker icon for text-to-speech
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* image slider */}
+        <div className="example-images">
+          <h2>Example Images</h2>
+          <Slider {...settings}>
+            {exampleImages.map((image, index) => (
+              <div key={index} onClick={() => handleImageClick(image)}>
+                <img
+                  src={image}
+                  alt={`Example ${index}`}
+                  className="slider-image"
+                />
+              </div>
+            ))}
+          </Slider>
+        </div>
+
+        <div className="actions-bottom">
+          <button type="submit" className="btn btn-generate" disabled={loading}>
+            {loading ? "Generating..." : "Generate Caption"}
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleClearInputs}
+          >
+            Clear Input
+          </button>
+          <select
+            name="dropdown-model"
+            id="menu-items"
+            ref={modelDropdownRef}
+            value={selectedModel}
+            onChange={(e) => setSelectedModel(e.target.value)}
+          >
+            <option value="" disabled selected>
+              Select model
+            </option>
+            <option value="J">Johan</option>
+            <option value="V">Vinnie</option>
+          </select>
+        </div>
       </form>
-
-      {caption && (
-        <div className="caption-box mt-4">
-          <h5>Generated Caption:</h5>
-          <p>{caption}</p>
-        </div>
-      )}
-
-      {image && (
-        <div>
-          <img src={image} className="img-preview" ref={imgPreviewRef} alt="Uploaded Preview" />
-        </div>
-      )}
     </div>
   );
 };

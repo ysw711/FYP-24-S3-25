@@ -1,21 +1,373 @@
-.container {
-    max-width: 600px;
-    margin-top: 50px;
-}
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
 
-.img-preview {
-    max-width: 100%;
-    height: auto;
-    margin-top: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 5px;
-}
+/* General styling */
+/* body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #1c0c43;
+  color: #fff;
+} */
 
-.caption-box {
-    margin-top: 20px;
+/* Container styling */
+.container-imageCaptioning {
+    max-width: 1500px;
+    margin: 0 auto;
     padding: 20px;
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+    /* font-family: 'Arial', sans-serif; */
+    background-color: #1c0c43;
+    color: #fff;
+  }
+
+/* Title styling */
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
 }
+
+p {
+  font-size: 1em;
+  margin-bottom: 30px;
+}
+
+/* Button styling */
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.actions-bottom {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-upload {
+  background-color: #ffa500;
+  color: #fff;
+}
+
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.upload-btn-wrapper:hover{
+  background-color: #ec9f0f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  
+}
+
+.btn-generate{
+  background-color: #4a47ff;
+  color: #fff;
+  width:100%;
+}
+
+.btn-generate:hover{
+  background-color: #4846be;
+  
+}
+.dropdown-model{
+  width: 350px;
+  outline: none;
+  border: 1px solid #fff;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 4px rgb(146 161 176 / 15%);
+  cursor: pointer;
+}
+
+/* Styling for the speaker button */
+.btn-speak {
+  background-color: #6a5acd; /* Medium purple background */
+  color: #fff; /* White icon color */
+  border: none; /* Remove border */
+  border-radius: 50%; /* Round button */
+  width: 40px; /* Fixed width */
+  height: 40px; /* Fixed height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px; /* Increase icon size */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth background change */
+}
+
+.btn-speak:hover {
+  background-color: #836fff; /* Lighter purple on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+}
+
+.btn-speak:active {
+  background-color: #483d8b; /* Darker purple when clicked */
+}
+
+.btn-speak:focus {
+  outline: none; /* Remove default focus outline */
+}
+
+.btn-capture {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #ff6347;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-capture:hover {
+  background-color: #c14e02;
+}
+
+/* webcam styling */
+.webcam-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.webcam-view {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+
+select:focus,
+select:hover{
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.329);
+}
+
+/* Image preview styling */
+.image-preview-container {
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.image-preview,
+.image-placeholder {
+  width: 400px;
+  height: 300px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  font-size: 1.2em;
+  color: #bcb8b2ad;
+}
+
+.image-placeholder {
+  background-color: #dddddd9b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.outer{
+  background-color: #2a1d59;
+  padding: 20px;
+  display: flex;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  
+}
+
+.image-preview-container {
+  margin-bottom: 20px;
+}
+
+/* Slider styling */
+.slick-slider {
+  margin: 20px auto;
+  width: 70%; /* Reduce the width for a cleaner look */
+  max-width: 1000px;
+}
+
+.slick-slide {
+  padding: 10px;
+}
+
+.slick-prev,
+.slick-next {
+  font-size: 0; /* Hide default arrows */
+  background-color: #4a47ff; /* Same as the "Generate Caption" button */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+  background-color: #836fff; /* Hover effect for buttons */
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-size: 20px;
+  color: #fff;
+}
+
+.slick-prev {
+  left: -50px; /* Positioning left arrow */
+}
+
+.slick-next {
+  right: -50px; /* Positioning right arrow */
+}
+
+.slider-image {
+  width: 100%;
+  height: 150px; /* Small height for compact look */
+  object-fit: cover; /* Ensure the images fit nicely */
+  border-radius: 10px; /* Rounded corners to match other elements */
+  transition: transform 0.3s ease;
+}
+
+.slider-image:hover {
+  transform: scale(1.05); /* Zoom effect on hover */
+}
+
+.slick-dots {
+  bottom: -25px; /* Adjust dot position */
+  padding: 10px;
+}
+
+.slick-dots li button:before {
+  font-size: 8px;
+  color: #fff; /* Dot color */
+}
+
+.slick-dots li.slick-active button:before {
+  color: #4a47ff; /* Active dot color matches theme */
+}
+
+/* Flexbox alignment for the slider container */
+.example-images {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.example-images h3 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #ffa500; /* Title color matching theme */
+}
+
+.slick-list {
+  padding: 0 20px; /* Add some padding for better spacing */
+}
+
+/* Generated caption styling */
+.generated-caption {
+  font-size: 0.9em;
+  margin-bottom: 30px;
+  padding: 20px;
+  text-align:justify ;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-wrap: wrap;
+}
+
+.generated-caption-p{
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+
+/* Form styling */
+.form-group {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+.form-actions {
+  margin-top: 20px;
+}
+
+/* Fixed size for image preview */
+.image-preview {
+  max-width:min-content; 
+  object-fit: cover;
+}
+
+/* Loading spinner */
+.loader {
+  margin-top: 10px;
+  border: 5px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 5px solid #3498db;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Footer styling */
+.footer {
+  background-color: #2a1d59;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  position: absolute;
+  height: -100px;
+  margin-top: auto;
+  width: 100%;
+}
+
